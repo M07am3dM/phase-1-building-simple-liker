@@ -3,9 +3,36 @@ const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
+const toggleHearts = (heart) => {
+  if (heart.innerText === EMPTY_HEART) {
+    mimicServerCall()
+    .then(() => {
+      heart.innerText = FULL_HEART;
+      heart.classList.add('activated-heart');
+    })
 
+    .catch(error => {
+      const errorModal = document.querySelector('#modal');
+      errorModal.classList.remove('hidden');
+      const errorMessage = document.querySelector('#modal-message');
+      errorMessage.innerText = error;
 
+      setTimeout(() => {
+        errorModal.classList.add('hidden');
+      }, 3000);
+    });
 
+  }else {
+    heart.innerText = EMPTY_HEART;
+    heart.classList.remove('activated-heart');
+  }
+}
+
+const heartIcons = document.querySelectorAll('.like-glyph');
+heartIcons.forEach(heart => {
+  heart.addEventListener('click', () => 
+    toggleHearts(heart)
+)});
 
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
@@ -23,3 +50,4 @@ function mimicServerCall(url="http://mimicServer.example.com", config={}) {
     }, 300);
   });
 }
+
